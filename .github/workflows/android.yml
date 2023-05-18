@@ -22,11 +22,12 @@ jobs:
       - name: Run Lint
         run: ./gradlew lint
       
-      - name: Uplaod html test report
+      - name: Upload HTML test report
         uses: actions/upload-artifact@v3
         with:
-          name: index.html
-          path : app/build/reports/lint-results-debug.html
+          name: Lint Report
+          path: app/build/reports/lint-results-debug.html
+
     
   build:
   # The type of runner that the job will run on
