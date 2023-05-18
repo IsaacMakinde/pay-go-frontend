@@ -18,9 +18,13 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3
         
+      - name: Grant execute permissions for gradlew
+        run: chmod +x gradlew
+        
       
       - name: Run Lint
         run: ./gradlew lint
+      
       
       - name: Upload HTML test report
         uses: actions/upload-artifact@v3
