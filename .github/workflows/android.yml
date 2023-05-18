@@ -20,7 +20,7 @@ jobs:
         
       
       - name: Run Lint
-        run: ./gradlew lintDebug
+        run: ./gradlew lint
       
       - name: Uplaod html test report
         uses: actions/upload-artifact@v3
