@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.storeb.databinding.FragmentHomeBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 public class HomeFragment extends Fragment {
 
@@ -29,6 +30,14 @@ public class HomeFragment extends Fragment {
 
         final TextView textView = binding.textHome;
         final Button joinButton = binding.buttonGroupJoin;
+        final Button createButton = binding.buttonCreateGroup;
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Creating Basket...", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
