@@ -1,19 +1,16 @@
 package com.example.storeb.ui.list;
 
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.example.storeb.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.storeb.databinding.FragmentListBudgetDialogBinding;
 
 public class ListBudgetDialogFragment extends DialogFragment {
@@ -30,6 +27,13 @@ public class ListBudgetDialogFragment extends DialogFragment {
                              @Nullable Bundle savedInstanceState) {
         ListBudgetDialogViewModel mViewModel = new ViewModelProvider(this).get(ListBudgetDialogViewModel.class);
         binding = FragmentListBudgetDialogBinding.inflate(inflater, container, false);
+        final Button dismissButton = binding.budgetDismissButton;
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         return binding.getRoot();
     }
 
