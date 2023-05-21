@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.storeb.databinding.FragmentListBinding;
@@ -27,23 +29,28 @@ public class ListFragment extends Fragment {
     private final String TAG = "ListFragment";
 
     // Barcode Result Handler
-    private final ActivityResultLauncher<ScanOptions> barcodeScanner = registerForActivityResult(new ScanContract(), result -> {
-        // Handle result
-        if (result.getContents() != null) {
-            Log.d(TAG, "onCreateView: " + result.getContents());
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Scan Result");
-            builder.setMessage(result.getContents());
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Nothing
-                    dialog.dismiss();
-                }
-            }).show();
-        }
-    });
+    private ActivityResultLauncher<ScanOptions> barcodeScanner;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        barcodeScanner = registerForActivityResult(new ScanContract(), result -> {
+            // Handle result
+            if (result.getContents() != null) {
+                Log.d(TAG, "onCreateView: " + result.getContents());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Scan Result");
+                builder.setMessage(result.getContents());
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Nothing
+                        dialog.dismiss();
+                    }
+                }).show();
+            }
+        });
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -53,12 +60,17 @@ public class ListFragment extends Fragment {
         binding = FragmentListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textList;
+        TextView textView = binding.textList;
         final Button addButton = binding.buttonListAdd;
         final Button scanButton = binding.buttonScan;
 
-        listViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
+        listViewModel.mBudget.observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                String budgetDisplay = String.format("20/%.2f", aDouble);
+                binding.textList.setText("Budget: $" + budgetDisplay);
+            }
+        });
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
