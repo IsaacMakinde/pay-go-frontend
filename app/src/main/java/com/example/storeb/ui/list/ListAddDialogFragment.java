@@ -24,11 +24,11 @@ public class ListAddDialogFragment extends DialogFragment {
                              @Nullable Bundle savedInstanceState) {
         ListAddDialogViewModel mViewModel = new ViewModelProvider(this).get(ListAddDialogViewModel.class);
         binding = FragmentListAddDialogBinding.inflate(inflater, container, false);
-
         final Button dismissButton = binding.dismissButton;
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dismiss();
                 Log.d(TAG, "onClick: Dismiss button was pressed");
             }

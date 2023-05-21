@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,22 +28,28 @@ public class BasketFragment extends Fragment {
     private final String TAG = "Basket";
 
     // Barcode Result Handler
-    private final ActivityResultLauncher<ScanOptions> barcodeScanner = registerForActivityResult(new ScanContract(), result -> {
-        // Handle result
-        if (result.getContents() != null) {
-            Log.d(TAG, "onCreateView: " + result.getContents());
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Scan Result");
-            builder.setMessage(result.getContents());
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Nothing
-                    dialog.dismiss();
-                }
-            }).show();
-        }
-    });
+    private ActivityResultLauncher<ScanOptions> barcodeScanner;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        barcodeScanner = registerForActivityResult(new ScanContract(), result -> {
+            // Handle result
+            if (result.getContents() != null) {
+                Log.d(TAG, "onCreateView: " + result.getContents());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Scan Result");
+                builder.setMessage(result.getContents());
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Nothing
+                        dialog.dismiss();
+                    }
+                }).show();
+            }
+        });
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class BasketFragment extends Fragment {
                 new ViewModelProvider(this).get(BasketViewModel.class);
 
         binding = FragmentBasketBinding.inflate(inflater, container, false);
+
         View root = binding.getRoot();
 
 
