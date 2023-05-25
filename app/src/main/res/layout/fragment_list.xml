@@ -14,19 +14,20 @@
         android:layout_marginEnd="32dp"
         android:text="@string/scan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_list_add" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_list"
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@color/blue_900"
+        app:layout_constraintBottom_toTopOf="@id/button_list_add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_list" />
+        app:layout_constraintTop_toBottomOf="@id/button_scan" />
 
     <TextView
         android:id="@+id/text_list"
@@ -38,11 +39,11 @@
         android:clickable="true"
         android:contentDescription="@string/hello"
         android:focusable="true"
+        android:gravity="center_horizontal|center_vertical"
         android:minHeight="48dp"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.145"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,6 +55,7 @@
         android:layout_marginEnd="32dp"
         android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_list" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
