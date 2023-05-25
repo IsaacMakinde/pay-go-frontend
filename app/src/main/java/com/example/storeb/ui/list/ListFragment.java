@@ -46,6 +46,7 @@ public class ListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // Nothing
                         dialog.dismiss();
+
                     }
                 }).show();
             }
