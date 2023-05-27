@@ -18,9 +18,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.storeb.databinding.FragmentListBinding;
+import com.example.storeb.models.ProductModel;
 import com.example.storeb.ui.CaptureAct;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.List;
 
 public class ListFragment extends Fragment {
 
@@ -81,6 +84,14 @@ public class ListFragment extends Fragment {
             }
         });
 
+        ListViewModel.mListItems.observe(getViewLifecycleOwner(), new Observer<List<ProductModel>>() {
+            @Override
+            public void onChanged(List<ProductModel> productModels) {
+                Log.d(TAG, "onChanged: " + ListViewModel.mListItems.getValue());
+
+            }
+
+        });
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

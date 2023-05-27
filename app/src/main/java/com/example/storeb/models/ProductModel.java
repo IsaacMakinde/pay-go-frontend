@@ -3,7 +3,7 @@ package com.example.storeb.models;
 import java.util.Objects;
 
 public class ProductModel {
-    int product_id;
+    int id;
     String name;
     String description;
     Float price;
@@ -12,8 +12,8 @@ public class ProductModel {
     int quantity;
     boolean hasScanned;
 
-    public ProductModel(int product_id, String name, String description, Float price, String image, String barcode, int quantity) {
-        this.product_id = product_id;
+    public ProductModel(int id, String name, String description, Float price, String image, String barcode, int quantity) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
@@ -23,12 +23,12 @@ public class ProductModel {
         this.hasScanned = false;
     }
 
-    public int getProduct_id() {
-        return product_id;
+    public int getId() {
+        return id;
     }
 
-    public void setProduct_id(int product_id) {
-        this.product_id = product_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -92,18 +92,18 @@ public class ProductModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductModel that = (ProductModel) o;
-        return getProduct_id() == that.getProduct_id() && Objects.equals(getName(), that.getName()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getImage(), that.getImage()) && Objects.equals(getBarcode(), that.getBarcode());
+        return getId() == that.getId() && Objects.equals(getName(), that.getName()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getImage(), that.getImage()) && Objects.equals(getBarcode(), that.getBarcode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getProduct_id(), getName(), getDescription(), getPrice(), getImage(), getBarcode(), getQuantity(), isHasScanned());
+        return Objects.hash(getId(), getName(), getDescription(), getPrice(), getImage(), getBarcode(), getQuantity(), isHasScanned());
     }
 
     @Override
     public String toString() {
         return "ProductModel{" +
-                "product_id=" + product_id +
+                "product_id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
@@ -114,5 +114,3 @@ public class ProductModel {
                 '}';
     }
 }
-
-
