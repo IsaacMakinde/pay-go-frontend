@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#D6EAF8">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_add_dialog_recycleview"
@@ -26,7 +27,7 @@
         <HorizontalScrollView
             android:id="@+id/list_add_category_scrollview"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="2dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/done"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,12 +55,14 @@
             android:layout_width="0dp"
             android:layout_height="26dp"
             android:layout_marginStart="8dp"
+            android:textColor="@color/black"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+
             tools:background="@color/blue_900" />
 
         <ProgressBar

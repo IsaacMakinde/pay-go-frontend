@@ -2,7 +2,10 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
-            <!-- Add your trusted certificate authorities here if necessary -->
+            <!-- Add your trusted certificate authorities here -->
+            <certificates src="system" />
+            <certificates src="user" />
+            <!-- Additional custom trusted certificates can be added here -->
         </trust-anchors>
     </base-config>
     <domain-config cleartextTrafficPermitted="true">

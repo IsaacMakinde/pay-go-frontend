@@ -19,6 +19,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.storeb.R;
 import com.example.storeb.models.ProductModel;
@@ -30,9 +31,13 @@ import java.util.Locale;
 public class ListAddDialogAdapter extends RecyclerView.Adapter<ListAddDialogAdapter.ViewHolder> {
     final String TAG = "ListAddDialogAdapter";
     private List<ProductModel> productList;
+    ListViewModel listViewModel;
+    ListAddDialogViewModel listAddDialogViewModel;
 
     public ListAddDialogAdapter(List<ProductModel> productList) {
         this.productList = productList;
+        this.listViewModel = new ListViewModel();
+        this.listAddDialogViewModel = new ListAddDialogViewModel();
     }
 
     @NonNull
@@ -45,16 +50,13 @@ public class ListAddDialogAdapter extends RecyclerView.Adapter<ListAddDialogAdap
 
     @Override
     public void onBindViewHolder(@NonNull ListAddDialogAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-
-//        Glide.get(holder.cardviewTitle.getContext()).clearMemory();
+        productList.get(position).setQuantity(1);
+        String priceDisplay = String.format(Locale.getDefault(), "%s%.2f", holder.symbol, productList.get(position).getPrice());
         holder.cardviewTitle.setText(productList.get(position).getName());
-        holder.cardviewPrice.setText(holder.symbol + productList.get(position).getPrice());
-//        Glide.with(holder.cardviewTitle.getContext())
-//                .load(productList.get(position).getImage())
-//                .into(holder.cardviewImage);
-
+        holder.cardviewPrice.setText(priceDisplay);
+        holder.cardviewDescription.setText(productList.get(position).getDescription());
         Glide.with(holder.cardviewImage.getContext())
-                .load("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fbasicagency%2Fphotos%2Fa.100956606638781%2F2680399548694461%2F%3Ftype%3D3&psig=AOvVaw2hjH_CJYoEMmUkdeCm7r-F&ust=1685122597894000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCPDjnoGBkf8CFQAAAAAdAAAAABAD")
+                .load(productList.get(position).getImage()).apply(new RequestOptions().disallowHardwareConfig())
                 .placeholder(R.drawable.ic_baseline_shopping_basket_24)
                 .error(R.drawable.ic_home_black_24dp)
                 .transition(DrawableTransitionOptions.withCrossFade())
@@ -78,6 +80,8 @@ public class ListAddDialogAdapter extends RecyclerView.Adapter<ListAddDialogAdap
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: " + productList.get(position).getName());
+                listViewModel.addToListItems(productList.get(position));
+
             }
         });
 
@@ -104,6 +108,7 @@ public class ListAddDialogAdapter extends RecyclerView.Adapter<ListAddDialogAdap
 
         TextView cardviewTitle;
         TextView cardviewPrice;
+        TextView cardviewDescription;
         ImageView cardviewImage;
         Button cardviewAdd;
         Currency currency = Currency.getInstance(Locale.getDefault());
@@ -114,6 +119,7 @@ public class ListAddDialogAdapter extends RecyclerView.Adapter<ListAddDialogAdap
             super(itemView);
             cardviewTitle = itemView.findViewById(R.id.cardview_product_title);
             cardviewPrice = itemView.findViewById(R.id.cardview_product_price);
+            cardviewDescription = itemView.findViewById(R.id.cardview_product_description);
             cardviewImage = itemView.findViewById(R.id.cardview_product_image);
             cardviewAdd = itemView.findViewById(R.id.cardview_product_add);
             symbol = currency.getSymbol();
