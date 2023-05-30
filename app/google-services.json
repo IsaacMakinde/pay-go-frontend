@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "53369980343",
+    "project_id": "poised-rock-382916",
+    "storage_bucket": "poised-rock-382916.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53369980343:android:f42f5584f7029ced8c1432",
+        "android_client_info": {
+          "package_name": "com.example.storez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53369980343-qnrj5hts7qpfco78p0e3gcgoo3jdp3g9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADRTvuDXr7rjEsnYQe1z9eLbrWV9Ib_aI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53369980343-qnrj5hts7qpfco78p0e3gcgoo3jdp3g9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

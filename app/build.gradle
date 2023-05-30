@@ -1,17 +1,19 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
-    namespace 'com.example.storeb'
+    namespace 'com.example.storez'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.storeb"
+        applicationId "com.example.storez"
         minSdk 21
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "3.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -39,6 +41,10 @@ dependencies {
     implementation composeBom
     androidTestImplementation composeBom
 
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
+
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
