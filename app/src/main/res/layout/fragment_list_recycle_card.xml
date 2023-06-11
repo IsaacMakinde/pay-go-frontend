@@ -27,7 +27,7 @@
             android:id="@+id/cardview_constraint"
             android:layout_width="match_parent"
             android:layout_height="726dp"
-            android:background="#FFFFFF">
+            android:background="@color/white">
 
             <ImageView
                 android:id="@+id/cardview_product_image"
@@ -92,7 +92,7 @@
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur accumsan, odio at hendrerit pulvinar, tortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunc."
-                android:textColor="#333333"
+                android:textColor="@color/design_default_color_on_secondary"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@+id/cardview_product_price"

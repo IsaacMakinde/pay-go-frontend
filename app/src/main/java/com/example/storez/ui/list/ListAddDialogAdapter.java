@@ -84,6 +84,7 @@ public class ListAddDialogAdapter extends RecyclerView.Adapter<ListAddDialogAdap
 
             }
         });
+        Log.d(TAG, "onBindViewHolder: " + productList.get(position).getImage());;
 
     }
 

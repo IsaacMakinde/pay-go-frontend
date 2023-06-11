@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,16 +39,33 @@ public class ListBudgetDialogFragment extends DialogFragment {
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String budget = budgetEditText.getText().toString();
-//                Log.d(TAG, "onClick: Dismiss button was pressed");
-//                Log.d(TAG, "onClick: Budget is: " + budget);
-                listViewModel.setBudget(Double.valueOf(budget));
+                String valueString = budgetEditText.getText().toString();
+                if (!valueString.isEmpty()) {
+                    // Validate the input string
+                    if (isValidDecimalNumber(valueString)) {
+                        double budget = Double.parseDouble(valueString);
+                        listViewModel.setBudget(budget);
+                    } else {
+                        // Display an error message or handle the invalid input
+                        Toast.makeText(getContext(), "Invalid input. Please enter a valid decimal number.", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
                 dismiss();
             }
         });
+
         return binding.getRoot();
     }
 
+    private boolean isValidDecimalNumber(String input) {
+        try {
+            double number = Double.parseDouble(input);
+            // Additional checks can be added here if needed
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
 
+    }
 }

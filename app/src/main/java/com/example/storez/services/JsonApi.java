@@ -10,4 +10,7 @@ import retrofit2.http.GET;
 public interface JsonApi {
     @GET("products")
     Call<List<ProductModel>> getProducts();
+
+    @GET("products/<String :barcode>")
+    Call<List<ProductModel>> getProductsByBarcode();
 }

@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storez.databinding.FragmentListBinding;
 import com.example.storez.models.ListPreferenceHelper;
@@ -37,6 +39,8 @@ public class ListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        ListViewModel listViewModel =
+                new ViewModelProvider(requireActivity()).get(ListViewModel.class);
         super.onCreate(savedInstanceState);
         barcodeScanner = registerForActivityResult(new ScanContract(), result -> {
             // Handle result
@@ -44,7 +48,10 @@ public class ListFragment extends Fragment {
                 Log.d(TAG, "onCreateView: " + result.getContents());
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Scan Result");
-                builder.setMessage(result.getContents());
+                String eanBarcode = String.format("0%s", result.getContents());
+                listViewModel.checkList(eanBarcode);
+                Log.d(TAG, "onCreate: " + eanBarcode);
+                builder.setMessage(eanBarcode);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -71,6 +78,25 @@ public class ListFragment extends Fragment {
         TextView textView = binding.textList;
         final Button addButton = binding.buttonListAdd;
         final Button scanButton = binding.buttonScan;
+
+        RecyclerView recyclerView = binding.recyclerViewList;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ListAdapter listAdapter = new ListAdapter(null);
+        recyclerView.setAdapter(listAdapter);
+
+        listViewModel.mListItems.observe(getViewLifecycleOwner(), new Observer<List<ProductModel>>() {
+            @Override
+            public void onChanged(List<ProductModel> productList) {
+                if (ListViewModel.mListItems.getValue() != null) {
+                    Log.d(TAG, "onChanged: mAllProductsList is null");
+                    listAdapter.setProductList(listViewModel.mListItems.getValue());
+                    Log.d(TAG, "onChanged: " + listViewModel.mListItems.getValue());
+                    listAdapter.notifyDataSetChanged();
+
+                }
+            }
+        });
+
 
 
 

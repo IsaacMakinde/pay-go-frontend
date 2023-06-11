@@ -10,11 +10,14 @@ import androidx.lifecycle.ViewModel;
 import com.example.storez.models.ListPreferenceHelper;
 import com.example.storez.models.MutableTuple;
 import com.example.storez.models.ProductModel;
+import com.example.storez.services.RetrofitInstance;
 
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Retrofit;
 
 public class ListViewModel extends ViewModel {
     Currency currency = Currency.getInstance(Locale.getDefault());
@@ -28,8 +31,6 @@ public class ListViewModel extends ViewModel {
 
 
     public ListViewModel(ListPreferenceHelper preferenceHelper) {
-//        Double placeholder = 0.0;
-//        mBudget.setValue(placeholder);
         listPreferenceHelper = preferenceHelper;
         calculateTotal();
     }
@@ -62,6 +63,7 @@ public class ListViewModel extends ViewModel {
         if (allProducts.contains(product)) {
             mShowSnackbar.setValue(new MutableTuple<>(1, product.getName()));
         } else {
+            product.setQuantity(1);
             allProducts.add(product);
             mShowSnackbar.setValue(new MutableTuple<>(0, product.getName()));
         }
@@ -71,6 +73,7 @@ public class ListViewModel extends ViewModel {
 
         listPreferenceHelper.saveListState(mListItems.getValue(), mBudget.getValue());
         mShowSnackbar.setValue(new MutableTuple<>(-1, "null"));
+        Log.d(TAG, "addToListItems: " + mListItems.getValue());
     }
 
     public static void setListItems(List<ProductModel> listItems) {
@@ -78,10 +81,54 @@ public class ListViewModel extends ViewModel {
         calculateTotal();
     }
 
-    public static void removeFromListItems(ProductModel productModel) {
+
+    public static void increaseQuantity(ProductModel productModel) {
         if (mListItems.getValue().contains(productModel)) {
-            mListItems.getValue().get(mListItems.getValue().indexOf(productModel)).setQuantity(productModel.getQuantity() - 1);
+            List<ProductModel> updatedList = new ArrayList<>(mListItems.getValue());
+
+            int index = updatedList.indexOf(productModel);
+            ProductModel updatedProduct = updatedList.get(index);
+            updatedProduct.setPrice(productModel.getPrice() / productModel.getQuantity());
+            updatedProduct.setQuantity(updatedProduct.getQuantity() + 1);
+            updatedProduct.setPrice(productModel.getPrice() * updatedProduct.getQuantity());
+
+            updatedList.set(index, updatedProduct);
+            mListItems.setValue(updatedList);
+            Log.d(TAG, "increaseQuantity: " + mListItems.getValue());
+
         }
+        listPreferenceHelper.saveListState(mListItems.getValue(), mBudget.getValue());
+        calculateTotal();
+    }
+
+    public static void decreaseQuantity(ProductModel productModel) {
+        if (mListItems.getValue().contains(productModel)) {
+            List<ProductModel> updatedList = new ArrayList<>(mListItems.getValue());
+            int index = updatedList.indexOf(productModel);
+            if (productModel.getQuantity() <= 1) {
+                mListItems.getValue().remove(productModel);
+            }
+            else {
+                ProductModel updatedProduct = updatedList.get(index);
+                updatedProduct.setPrice(productModel.getPrice() / productModel.getQuantity());
+                mListItems.getValue().get(mListItems.getValue().indexOf(productModel)).setQuantity(productModel.getQuantity() - 1);
+                updatedProduct.setPrice(productModel.getPrice() * updatedProduct.getQuantity());
+
+                updatedList.set(index, updatedProduct);
+                mListItems.setValue(updatedList);
+                Log.d(TAG, "decreasedQuantity: " + mListItems.getValue());
+
+            }
+        }
+        listPreferenceHelper.saveListState(mListItems.getValue(), mBudget.getValue());
+        calculateTotal();
+    }
+
+    public static void removeFromList(ProductModel productModel) {
+        if (mListItems.getValue().contains(productModel)) {
+            mListItems.getValue().remove(productModel);
+        }
+        calculateTotal();
     }
 
 
@@ -91,10 +138,11 @@ public class ListViewModel extends ViewModel {
         }
         Double total = 0.0;
         for (ProductModel product : mListItems.getValue()) {
-            total += product.getPrice() * product.getQuantity();
+            total += product.getPrice();
         }
         mTotal.setValue(total);
-        Log.d(TAG, "calculateTotal: " + total);
+//        Log.d(TAG, "calculateTotal: " + total);
+
     }
 
     public LiveData<Double> getBudget() {
@@ -115,6 +163,25 @@ public class ListViewModel extends ViewModel {
 
     }
 
+    public void checkList(String barcode) {
+        if (mListItems.getValue() == null) {
+            mListItems.setValue(new ArrayList<>());
+        }
+        else {
+            List<ProductModel> updatedList = new ArrayList<>(mListItems.getValue());
+            for (ProductModel product : updatedList) {
+                if (product.getBarcode().equals(barcode)) {
+                    product.setHasScanned(true);
+                    Log.d(TAG, "checkList: " + product.getName() + " " + product.isHasScanned());
+
+                }
+            }
+
+            mListItems.setValue(updatedList);
+            listPreferenceHelper.saveListState(mListItems.getValue(), mBudget.getValue());
+        }
+    }
+
     public LiveData<Double> getTotal() {
         return mTotal;
     }
@@ -126,5 +193,6 @@ public class ListViewModel extends ViewModel {
     public String getSymbol() {
         return symbol;
     }
+
 
 }

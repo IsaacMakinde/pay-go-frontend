@@ -23,6 +23,17 @@ public class ProductModel {
         this.hasScanned = false;
     }
 
+    public ProductModel(ProductModel productModel) {
+        this.id = productModel.getId();
+        this.name = productModel.getName();
+        this.description = productModel.getDescription();
+        this.price = productModel.getPrice();
+        this.image = productModel.getImage();
+        this.barcode = productModel.getBarcode();
+        this.quantity = productModel.getQuantity();
+        this.hasScanned = productModel.isHasScanned();
+    }
+
     public int getId() {
         return id;
     }
