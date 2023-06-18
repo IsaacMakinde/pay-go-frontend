@@ -26,6 +26,7 @@ public class BasketListDialogFragment extends DialogFragment {
         BasketListDialogViewModel mViewModel = new ViewModelProvider(this).get(BasketListDialogViewModel.class);
         binding = FragmentBasketListDialogBinding.inflate(inflater, container, false);
 
+
         return binding.getRoot();
     }
 

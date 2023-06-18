@@ -14,13 +14,19 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.storez.databinding.FragmentBasketBinding;
+import com.example.storez.models.ListPreferenceHelper;
+import com.example.storez.models.ProductModel;
 import com.example.storez.ui.CaptureAct;
+import com.example.storez.ui.list.ListViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.List;
 
 public class BasketFragment extends Fragment {
 
@@ -59,13 +65,14 @@ public class BasketFragment extends Fragment {
         binding = FragmentBasketBinding.inflate(inflater, container, false);
 
         View root = binding.getRoot();
+        basketViewModel.listPreferenceHelper = new ListPreferenceHelper(getContext());
+        basketViewModel.loadListState();
 
 
         final TextView textView = binding.textBasket;
         final Button scanButton = binding.buttonBasketScan;
         final Button checkoutButton = binding.buttonBasketCheckout;
 
-        basketViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +86,24 @@ public class BasketFragment extends Fragment {
             public void onClick(View v) {
                 Snackbar.make(v, "Thank you for your purchase", Snackbar.LENGTH_LONG)
                         .setAction("OK", null).show();
+            }
+        });
+
+//        basketViewModel.mBasketItems.observe(getViewLifecycleOwner(),new Observer<List<ProductModel>>() {
+//            @Override
+//            public void onChanged(List<ProductModel> productModels) {
+//                if (basketViewModel.mBasketItems.getValue() != null) {
+//                    basketViewModel.mBasketItems.setValue(basketViewModel.mBasketItems.getValue());
+//
+//                }
+//            }
+//        });
+
+        basketViewModel.mTotal.observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                String totalDisplay = String.format("%.2f", aDouble);
+                binding.textBasket.setText("Total: " + basketViewModel.getSymbol() + totalDisplay);
             }
         });
 
