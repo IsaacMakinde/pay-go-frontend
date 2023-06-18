@@ -42,15 +42,19 @@
 
             <TextView
                 android:id="@+id/cardview_product_title"
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/product_name"
+                android:layout_marginEnd="8dp"
 
+                android:gravity="center_horizontal"
+                android:text="@string/product_name"
+                android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
+                card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@+id/cardview_product_image" />
 
@@ -73,22 +77,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:text="@string/product_price"
+                android:textAlignment="center"
                 android:textColor="#333333"
-                android:textSize="20sp"
+                android:textSize="14sp"
+                card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/cardview_product_title" />
+                card_view:layout_constraintTop_toBottomOf="@+id/cardview_product_title"
+                tools:textAlignment="center" />
 
             <TextView
                 android:id="@+id/cardview_product_description"
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="64dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:fadeScrollbars="false"
+                android:gravity="center_horizontal|center_vertical"
                 android:maxLines="10"
                 android:overScrollMode="always"
+                android:padding="3dp"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur accumsan, odio at hendrerit pulvinar, tortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunctortor ante tristique dolor, ac rutrum urna ex vitae nunc."

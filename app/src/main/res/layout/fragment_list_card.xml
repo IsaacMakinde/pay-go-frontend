@@ -48,11 +48,14 @@
                 android:layout_width="204dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="16dp"
                 android:text="Card Title"
                 android:textColor="@color/design_default_color_on_secondary"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/cardview_product_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.038"
                 card_view:layout_constraintStart_toEndOf="@+id/cardview_product_image"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -73,18 +76,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/cardview_product_image"
-                app:layout_constraintTop_toBottomOf="@+id/cardview_product_title">
+                app:layout_constraintTop_toBottomOf="@+id/cardview_product_title"
+                app:layout_constraintVertical_bias="0.302"
+                tools:foregroundGravity="center_vertical">
 
                 <TextView
                     android:id="@+id/cardview_product_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxHeight="102dp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textSize="10sp" />
 
             </ScrollView>
 

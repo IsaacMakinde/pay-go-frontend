@@ -23,6 +23,7 @@ import com.example.storez.databinding.FragmentListBinding;
 import com.example.storez.models.ListPreferenceHelper;
 import com.example.storez.models.ProductModel;
 import com.example.storez.ui.CaptureAct;
+import com.example.storez.ui.basket.BasketViewModel;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -41,6 +42,8 @@ public class ListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         ListViewModel listViewModel =
                 new ViewModelProvider(requireActivity()).get(ListViewModel.class);
+        BasketViewModel basketViewModel =
+                new ViewModelProvider(requireActivity()).get(BasketViewModel.class);
         super.onCreate(savedInstanceState);
         barcodeScanner = registerForActivityResult(new ScanContract(), result -> {
             // Handle result
@@ -49,7 +52,12 @@ public class ListFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Scan Result");
                 String eanBarcode = String.format("0%s", result.getContents());
-                listViewModel.checkList(eanBarcode);
+                if (listViewModel.checkList(eanBarcode)) {
+                    listViewModel.setToScanned(eanBarcode);
+                    listViewModel.addToScannedBasket(listViewModel.getItemByBarcode(eanBarcode));
+                    basketViewModel.addToBasket(listViewModel.getItemByBarcode(eanBarcode));
+                }
+
                 Log.d(TAG, "onCreate: " + eanBarcode);
                 builder.setMessage(eanBarcode);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

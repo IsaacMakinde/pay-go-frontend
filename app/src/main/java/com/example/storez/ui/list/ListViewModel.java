@@ -28,6 +28,8 @@ public class ListViewModel extends ViewModel {
     static MutableLiveData<Double> mTotal = new MutableLiveData<>(0.0);
     static MutableLiveData<MutableTuple<Integer, String>> mShowSnackbar = new MutableLiveData<>(new MutableTuple(-1, "null"));
     static ListPreferenceHelper listPreferenceHelper;
+    static MutableLiveData<List<ProductModel>> mScannedProductsToBasket = new MutableLiveData<>(new ArrayList<>());
+    static MutableLiveData<Boolean> mShowBudgetWarning = new MutableLiveData<>(false);
 
 
     public ListViewModel(ListPreferenceHelper preferenceHelper) {
@@ -50,7 +52,7 @@ public class ListViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        Log.d(TAG, "onCleared: called");
+//        Log.d(TAG, "onCleared: called");
     }
 
     public static void addToListItems(ProductModel product) {
@@ -73,8 +75,10 @@ public class ListViewModel extends ViewModel {
 
         listPreferenceHelper.saveListState(mListItems.getValue(), mBudget.getValue());
         mShowSnackbar.setValue(new MutableTuple<>(-1, "null"));
-        Log.d(TAG, "addToListItems: " + mListItems.getValue());
+//        Log.d(TAG, "addToListItems: " + mListItems.getValue());
     }
+
+
 
     public static void setListItems(List<ProductModel> listItems) {
         mListItems.setValue(listItems);
@@ -91,10 +95,11 @@ public class ListViewModel extends ViewModel {
             updatedProduct.setPrice(productModel.getPrice() / productModel.getQuantity());
             updatedProduct.setQuantity(updatedProduct.getQuantity() + 1);
             updatedProduct.setPrice(productModel.getPrice() * updatedProduct.getQuantity());
+            updatedProduct.setHasScanned(false);
 
             updatedList.set(index, updatedProduct);
             mListItems.setValue(updatedList);
-            Log.d(TAG, "increaseQuantity: " + mListItems.getValue());
+//            Log.d(TAG, "increaseQuantity: " + mListItems.getValue());
 
         }
         listPreferenceHelper.saveListState(mListItems.getValue(), mBudget.getValue());
@@ -113,6 +118,7 @@ public class ListViewModel extends ViewModel {
                 updatedProduct.setPrice(productModel.getPrice() / productModel.getQuantity());
                 mListItems.getValue().get(mListItems.getValue().indexOf(productModel)).setQuantity(productModel.getQuantity() - 1);
                 updatedProduct.setPrice(productModel.getPrice() * updatedProduct.getQuantity());
+                updatedProduct.setHasScanned(false);
 
                 updatedList.set(index, updatedProduct);
                 mListItems.setValue(updatedList);
@@ -129,6 +135,15 @@ public class ListViewModel extends ViewModel {
             mListItems.getValue().remove(productModel);
         }
         calculateTotal();
+    }
+
+    public ProductModel getItemByBarcode(String barcode) {
+        for (ProductModel product : mListItems.getValue()) {
+            if (product.getBarcode().equals(barcode)) {
+                return product;
+            }
+        }
+        return null;
     }
 
 
@@ -157,29 +172,80 @@ public class ListViewModel extends ViewModel {
 
         mListItems.setValue(listPreferenceHelper.getListState());
         mBudget.setValue(listPreferenceHelper.getBudgetState());
+        mScannedProductsToBasket.setValue(listPreferenceHelper.getBasketState());
         setListItems(mListItems.getValue());
-        Log.d(TAG, "loadListState: " + mListItems.getValue());
-        Log.d(TAG, "loadListState: " + mBudget.getValue());
+//        Log.d(TAG, "loadListState: " + mListItems.getValue());
+//        Log.d(TAG, "loadListState: " + mBudget.getValue());
 
     }
 
-    public void checkList(String barcode) {
+    public boolean checkList(String barcode) {
+        if (mListItems.getValue() == null) {
+            mListItems.setValue(new ArrayList<>());
+            return false;
+        }
+        else {
+            List<ProductModel> updatedList = new ArrayList<>(mListItems.getValue());
+            for (ProductModel product : updatedList) {
+                if (product.getBarcode().equals(barcode) && !product.isHasScanned()) {
+                    Log.d(TAG, "checkList: " + product.getName() + "dfasfae");
+                    return true;
+
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void setToScanned(String barcode) {
         if (mListItems.getValue() == null) {
             mListItems.setValue(new ArrayList<>());
         }
         else {
             List<ProductModel> updatedList = new ArrayList<>(mListItems.getValue());
             for (ProductModel product : updatedList) {
-                if (product.getBarcode().equals(barcode)) {
+                if (product.getBarcode().equals(barcode) && !product.isHasScanned()) {
                     product.setHasScanned(true);
-                    Log.d(TAG, "checkList: " + product.getName() + " " + product.isHasScanned());
-
+                    updatedList.set(updatedList.indexOf(product), product);
+                    mListItems.setValue(updatedList);
+                    break;
                 }
             }
-
             mListItems.setValue(updatedList);
             listPreferenceHelper.saveListState(mListItems.getValue(), mBudget.getValue());
         }
+
+
+    }
+
+    public void addToScannedBasket(ProductModel productModel) {
+        if (mListItems.getValue() == null) {
+            mListItems.setValue(new ArrayList<>());
+
+        }
+        if (mScannedProductsToBasket.getValue() == null) {
+            mScannedProductsToBasket.setValue(new ArrayList<>());
+        }
+
+            List<ProductModel> updatedScannedBasket = new ArrayList<>(mScannedProductsToBasket.getValue());
+            List<ProductModel> updatedList = new ArrayList<>(mListItems.getValue());
+            if (productModel.isHasScanned() && !updatedScannedBasket.contains(productModel)) {
+                updatedScannedBasket.add(productModel);
+                mScannedProductsToBasket.setValue(updatedScannedBasket);
+                listPreferenceHelper.saveBasketState(mScannedProductsToBasket.getValue());
+            }
+
+            else  if(productModel.isHasScanned() && updatedScannedBasket.contains(productModel)) {
+                int index = updatedScannedBasket.indexOf(productModel);
+                updatedScannedBasket.set(index, productModel);
+                mScannedProductsToBasket.setValue(updatedScannedBasket);
+                listPreferenceHelper.saveBasketState(mScannedProductsToBasket.getValue());
+            }
+
+        Log.d(TAG, "addToScannedBasket: " + mScannedProductsToBasket.getValue());
+        Log.d(TAG, "addToScannedBasket: " + listPreferenceHelper.getBasketState());
+
     }
 
     public LiveData<Double> getTotal() {
